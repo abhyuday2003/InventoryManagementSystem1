@@ -1,0 +1,11 @@
+﻿@model dynamic
+
+<h2>User Summary Report</h2>
+
+<div class="border p-4 bg-light rounded">
+    <p><strong>Total Orders:</strong> @Model.TotalOrders</p>
+    <p><strong>Total Products Purchased:</strong> @Model.TotalProductsPurchased</p>
+    <p><strong>Total Amount Spent:</strong> @Model.TotalAmountSpent.ToString("C")</p>
+</div>
+
+<a asp-controller="Orders" asp-action="History" class="btn btn-primary mt-3">View Order History</a>

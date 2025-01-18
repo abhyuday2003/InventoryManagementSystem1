@@ -1,0 +1,20 @@
+﻿@if (Model == null)
+
+{
+    <div class="alert alert-warning">
+        @ViewBag.Message
+    </div>
+}
+
+else
+
+{
+    <h2 class="mb-4">Credit Details</h2>
+    <div class="border p-4 bg-light rounded">
+        <p><strong>Supplier:</strong> @Model.Supplier.SupplierName</p>
+        <p><strong>Outstanding Balance:</strong> @Model.OutstandingBalance.ToString("C")</p>
+        <p><strong>Credit Limit:</strong> @Model.CreditLimit.ToString("C")</p>
+        <p><strong>Last Updated:</strong> @Model.LastUpdated.ToString("yyyy-MM-dd HH:mm")</p>
+    </div>
+}
+has context menu

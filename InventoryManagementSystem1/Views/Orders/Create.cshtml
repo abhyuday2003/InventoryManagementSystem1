@@ -1,0 +1,28 @@
+﻿@model InventoryManagementSystem1.Models.Orders
+
+<h2 class="mb-4">Place Order</h2>
+
+<form asp-action="Create" method="post" class="shadow p-4 bg-white rounded">
+    <div class="form-group mb-3">
+        <label for="OrderType" class="form-label">Order Type</label>
+        <input asp-for="OrderType" class="form-control" placeholder="Enter order type (e.g., Online, Offline)" required />
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="ProductIds" class="form-label">Select Products</label>
+        <select class="form-control" name="ProductIds" multiple style="height: 200px;">
+            @foreach (var product in ViewBag.Products)
+            {
+                <option value="@product.ProductId">@product.ProductName (Stock: @product.QuantityStock)</option>
+            }
+        </select>
+        <small class="text-muted">Hold Ctrl (Cmd on Mac) to select multiple products.</small>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="Quantities" class="form-label">Quantities (per product selected)</label>
+        <input type="number" name="Quantities" class="form-control" placeholder="Enter quantity" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100 mt-3">Place Order</button>
+</form>

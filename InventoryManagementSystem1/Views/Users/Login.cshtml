@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Banking_App</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Banking_App.styles.css" asp-append-version="true" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+
+            .login-container h2 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .login-container .btn-primary {
+                background-color: #2C3E50;
+                border-color: #2C3E50;
+            }
+
+        .role-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+            .role-buttons .btn {
+                width: 48%;
+            }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .additional-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+            .additional-links a {
+                margin: 0 10px;
+                color: #2C3E50;
+            }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+        <div class="role-buttons">
+            <button class="btn btn-primary" onclick="showCustomerLogin()">Customer Login</button>
+            <button class="btn btn-primary" onclick="showAdminLogin()">Admin Login</button>
+        </div>
+        <form id="customerLoginForm" asp-controller="Login" asp-action="CustomerLogin" method="post" style="display:none;">
+            <div class="form-group">
+                <label for="customerUsername">Username</label>
+                <input type="text" class="form-control" id="customerUsername" name="username" required />
+            </div>
+            <div class="form-group">
+                <label for="customerPassword">Password</label>
+                <input type="password" class="form-control" id="customerPassword" name="password" required />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Login as Customer</button>
+        </form>
+        <form id="adminLoginForm" asp-controller="Login" asp-action="AdminLogin" method="post" style="display:none;">
+            <div class="form-group">
+                <label for="adminUsername">Username</label>
+                <input type="text" class="form-control" id="adminUsername" name="username" required />
+            </div>
+            <div class="form-group">
+                <label for="adminPassword">Password</label>
+                <input type="password" class="form-control" id="adminPassword" name="password" required />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Login as Admin</button>
+        </form>
+        <div class="additional-links">
+            <a asp-action="Register">New User</a>
+            <a href="@Url.Action("ForgotPassword", "Account")">Forgot Password</a>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        function showCustomerLogin() {
+            document.getElementById('customerLoginForm').style.display = 'block';
+            document.getElementById('adminLoginForm').style.display = 'none';
+        }
+
+        function showAdminLogin() {
+            document.getElementById('adminLoginForm').style.display = 'block';
+            document.getElementById('customerLoginForm').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
