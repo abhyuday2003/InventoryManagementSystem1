@@ -72,7 +72,7 @@
             <button class="btn btn-primary" onclick="showCustomerLogin()">Customer Login</button>
             <button class="btn btn-primary" onclick="showAdminLogin()">Admin Login</button>
         </div>
-        <form id="customerLoginForm" asp-controller="Login" asp-action="CustomerLogin" method="post" style="display:none;">
+        <form id="customerLoginForm" asp-controller="Users" asp-action="CustomerDashboard" method="post" style="display:none;">
             <div class="form-group">
                 <label for="customerUsername">Username</label>
                 <input type="text" class="form-control" id="customerUsername" name="username" required />

@@ -1,0 +1,32 @@
+﻿@model InventoryManagementSystem1.Models.Categories
+
+@{
+    ViewData["Title"] = "Add Category";
+}
+
+<h2>Add Category</h2>
+
+@if (TempData["Success"] != null)
+
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="CategoryName">Category Name</label>
+        <input type="text" asp-for="CategoryName" class="form-control" />
+        <span asp-validation-for="CategoryName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Category</button>
+</form>

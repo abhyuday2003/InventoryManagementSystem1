@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Threading.Tasks;
 using InventoryManagementSystem1.AppData;
 using InventoryManagementSystem1.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace InventoryManagementSystem1.Controllers
 {
@@ -50,6 +52,50 @@ namespace InventoryManagementSystem1.Controllers
         {
             return View();  // Return the login page
         }
+        [HttpPost]
+        public async Task<IActionResult> Login(Users model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Please fill in all required fields.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.UserName == model.UserName && u.Password == model.Password);
+
+            if (user == null )
+            {
+                TempData["ErrorMessage"] = "Invalid username, password, or role.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, user.UserName),
+        new Claim(ClaimTypes.Role, user.Role)
+    };
+
+            // Create claims identity
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Sign in the user
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+            // Store Role and UserId in the session on successful login
+            HttpContext.Session.SetString("Role", user.Role); // Storing Role
+            HttpContext.Session.SetInt32("UserId", user.UserId); // Storing UserId
+
+            // Redirect based on role
+            if (user.Role == "Customer")
+                return RedirectToAction("CustomerDashboard", "Customer");
+           /* else if (user.Role == "Admin")
+                return RedirectToAction("Dashboard", "Admin"); */
+
+            TempData["ErrorMessage"] = "Unknown role.";
+            return RedirectToAction("Index", "Home");
+        }
+        
 
     }
 }

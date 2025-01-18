@@ -13,20 +13,21 @@ namespace InventoryManagementSystem1.Controllers
             _context = context;
         }
         public IActionResult Index()
-        { 
-           // Fetch all products including their category and supplier details
-            var products = _context.Products
-                .Select(p => new
-                {
-                    p.ProductId,
-                    p.ProductName,
-                    CategoryName = p.Categories.CategoryName,
-                    SupplierName = p.Suppliers.SupplierName,
-                    p.UnitPrice,
-                    p.QuantityStock,
-                    p.ReorderLevel
-                })
-                .ToList();
+        {
+            // Fetch all products including their category and supplier details
+             var products = _context.Products
+                 .Select(p => new
+                 {
+                     p.ProductId,
+                     p.ProductName,
+                     CategoryName = p.Categories.CategoryName,
+                     SupplierName = p.Suppliers.SupplierName,
+                     p.UnitPrice,
+                     p.QuantityStock,
+                     p.ReorderLevel
+                 })
+                 .ToList();  
+          //  List<Products>products = _context.Products.ToList();
  
             return View(products);
         }
