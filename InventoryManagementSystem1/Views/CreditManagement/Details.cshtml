@@ -1,20 +1,33 @@
-﻿@if (Model == null)
+﻿@model IEnumerable<InventoryManagementSystem1.Models.CreditManagement>
 
-{
-    <div class="alert alert-warning">
-        @ViewBag.Message
-    </div>
-}
+<h2>Manage Credits</h2>
 
-else
-
-{
-    <h2 class="mb-4">Credit Details</h2>
-    <div class="border p-4 bg-light rounded">
-        <p><strong>Supplier:</strong> @Model.Supplier.SupplierName</p>
-        <p><strong>Outstanding Balance:</strong> @Model.OutstandingBalance.ToString("C")</p>
-        <p><strong>Credit Limit:</strong> @Model.CreditLimit.ToString("C")</p>
-        <p><strong>Last Updated:</strong> @Model.LastUpdated.ToString("yyyy-MM-dd HH:mm")</p>
-    </div>
-}
-has context menu
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Supplier</th>
+            <th>Outstanding Balance</th>
+            <th>Credit Limit</th>
+            <th>Last Updated</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var credit in Model)
+        {
+            <tr>
+                <td>@credit.Suppliers.SupplierName</td>
+                <td>@credit.OutstandingBalance</td>
+                <td>@credit.CreditLimit</td>
+                <td>@credit.LastUpdated.ToString("g")</td>
+                <td>
+                    <form asp-action="Pay" method="post">
+                        <input type="hidden" name="creditId" value="@credit.CreditId" />
+                        <input type="number" name="paymentAmount" step="0.01" min="1" max="@credit.OutstandingBalance" placeholder="Enter Amount" required />
+                        <button type="submit" class="btn btn-primary btn-sm">Pay</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

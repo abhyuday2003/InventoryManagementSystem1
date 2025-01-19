@@ -21,7 +21,7 @@ namespace InventoryManagementSystem1.Models
 
         public DateTime LastUpdated { get; set; }
 
-        public Users Users { get; set; } //navigation
+        public User Users { get; set; } //navigation
 
         public Suppliers Suppliers { get; set; } //navigation
     }

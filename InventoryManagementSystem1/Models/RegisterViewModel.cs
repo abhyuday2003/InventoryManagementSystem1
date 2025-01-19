@@ -2,17 +2,15 @@
 
 namespace InventoryManagementSystem1.Models
 {
-    public class User
+    public class RegisterViewModel
     {
-        [Key]
-        public int UserId { get; set; }
-
         [Required]
         [StringLength(100)]
         public string UserName { get; set; }
 
         [Required]
         [StringLength(100)]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [Required]
@@ -21,8 +19,6 @@ namespace InventoryManagementSystem1.Models
         public string Email { get; set; }
 
         [Required]
-        public string Role { get; set; } = "Customer";
-
-        public DateTime CreatedAt { get; set; }
+        public string Role { get; set; } = "Customer"; // Default to Customer
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using InventoryManagementSystem1.AppData;  // Your ApplicationDbContext namespace
-using InventoryManagementSystem1.Models;  // Your models namespace
+using InventoryManagementSystem1.Models;
 using System.Linq;
+using InventoryManagementSystem1.AppData;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagementSystem1.Controllers
 {
@@ -15,55 +15,52 @@ namespace InventoryManagementSystem1.Controllers
             _context = context;
         }
 
-        // GET: /CreditManagement/Details?userId=1
+        // Fetch and Display Credit Information
         public IActionResult Details(int userId)
         {
-            // Fetch credit information for the user
-            var creditInfo = _context.CreditManagement
-                .Include(c => c.Suppliers)  // Include supplier details
-                .FirstOrDefault(c => c.UserId == userId);
+            var creditData = _context.CreditManagement
+                .Include(c => c.Users)
+                .Include(c => c.Suppliers)
+                .Where(c => c.UserId == userId)
+                .ToList();
 
-            if (creditInfo == null)
+            if (creditData == null  )
             {
-                ViewBag.Message = "No credit information found for this user.";
+                // Redirect to NoCreditInfo view if no credit data exists
                 return View("NoCreditInfo");
             }
 
-            return View(creditInfo);
+            return View(creditData);
         }
 
-        // POST: /CreditManagement/Pay
+        // Pay Outstanding Balance
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Pay(int creditId, decimal amount)
+        public IActionResult Pay(int creditId, decimal paymentAmount)
         {
-            var creditInfo = _context.CreditManagement.FirstOrDefault(c => c.CreditId == creditId);
+            var creditRecord = _context.CreditManagement
+                .FirstOrDefault(c => c.CreditId == creditId);
 
-            if (creditInfo == null)
+            if (creditRecord != null)
             {
-                return NotFound("Credit record not found.");
+                creditRecord.OutstandingBalance -= paymentAmount;
+
+                // Prevent negative balance
+                if (creditRecord.OutstandingBalance < 0)
+                {
+                    creditRecord.OutstandingBalance = 0;
+                }
+
+                creditRecord.LastUpdated = DateTime.Now;
+                _context.SaveChanges();
+                TempData["Success"] = "Payment successful.";
+            }
+            else
+            {
+                TempData["Error"] = "Credit record not found.";
             }
 
-            if (amount <= 0)
-            {
-                ModelState.AddModelError("", "Invalid payment amount.");
-                return View("Details", creditInfo);
-            }
-
-            // Deduct payment from outstanding balance
-            creditInfo.OutstandingBalance -= amount;
-
-            // Ensure outstanding balance doesn't go negative
-            if (creditInfo.OutstandingBalance < 0)
-            {
-                creditInfo.OutstandingBalance = 0;
-            }
-
-            creditInfo.LastUpdated = DateTime.Now;
-            _context.SaveChanges();
-
-            ViewBag.Message = "Payment successful!";
-            return RedirectToAction("Details", new { userId = creditInfo.UserId });
+            return RedirectToAction("Details", new { userId = creditRecord?.UserId });
         }
     }
+
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250107072350_alltableaddition")]
-    partial class alltableaddition
+    [Migration("20250118154434_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,6 +71,10 @@ namespace InventoryManagementSystem1.Migrations
 
                     b.HasKey("CreditId");
 
+                    b.HasIndex("SupplierId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("CreditManagement");
                 });
 
@@ -95,6 +99,10 @@ namespace InventoryManagementSystem1.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("OrderDetailId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -157,6 +165,10 @@ namespace InventoryManagementSystem1.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ProductId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("Products");
                 });
@@ -249,6 +261,68 @@ namespace InventoryManagementSystem1.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem1.Models.CreditManagement", b =>
+                {
+                    b.HasOne("InventoryManagementSystem1.Models.Suppliers", "Suppliers")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventoryManagementSystem1.Models.Users", "Users")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Suppliers");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem1.Models.OrderDetails", b =>
+                {
+                    b.HasOne("InventoryManagementSystem1.Models.Orders", "Orders")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventoryManagementSystem1.Models.Products", "Products")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Orders");
+
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem1.Models.Products", b =>
+                {
+                    b.HasOne("InventoryManagementSystem1.Models.Categories", "Categories")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventoryManagementSystem1.Models.Suppliers", "Suppliers")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Categories");
+
+                    b.Navigation("Suppliers");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem1.Models.Orders", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }
