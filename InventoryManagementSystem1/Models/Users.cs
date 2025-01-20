@@ -2,7 +2,7 @@
 
 namespace InventoryManagementSystem1.Models
 {
-    public class Users
+    public class User
     {
         [Key]
         public int UserId { get; set; }
@@ -21,13 +21,8 @@ namespace InventoryManagementSystem1.Models
         public string Email { get; set; }
 
         [Required]
-        public string Role { get; set; } //= "Customer";
+        public string Role { get; set; } = "Customer";
 
         public DateTime CreatedAt { get; set; }
-
-        public ICollection<Transactions> Transactions { get; set; }
-        public ICollection<Orders> Orders { get; set; }
-
-
     }
 }

@@ -63,7 +63,7 @@ namespace InventoryManagementSystem1.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new Users
+                var user = new User
                 {
                     UserName = model.UserName,
                     Password = model.Password,

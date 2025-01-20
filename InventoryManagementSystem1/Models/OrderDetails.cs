@@ -5,12 +5,10 @@ namespace InventoryManagementSystem1.Models
 {
     public class OrderDetails
     {
-        // [Key, Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int SerialId { get; set; }
+        [Key]
+        public int OrderDetailId { get; set; }
 
-       // [Key,Column(Order = 1),]
-       [ ForeignKey("Orders")]
+        [ForeignKey("Orders")]
         public int OrderId { get; set; }
 
         [ForeignKey("Products")]

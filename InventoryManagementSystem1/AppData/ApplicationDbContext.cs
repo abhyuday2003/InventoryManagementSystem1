@@ -7,7 +7,7 @@ namespace InventoryManagementSystem1.AppData
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-        public DbSet<Users> Users { get; set; } 
+        public DbSet<User> Users { get; set; } 
 
         public DbSet<Categories> Categories { get; set; }
 
@@ -21,23 +21,15 @@ namespace InventoryManagementSystem1.AppData
 
         public DbSet<Transactions> Transactions { get; set; }
 
-        public DbSet<CreditManagement> CreditManagements { get; set; }
-
-        public DbSet<RegisterViewModel> RegisterViewModels { get; set; }
-
-        public DbSet<LoginViewModel>  loginViewModels { get; set; }
-
-
+        public DbSet<CreditManagement> CreditManagement { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<OrderDetails>().HasKey(o => new {o.SerialId,o.OrderId});
 
             // Seed Admin Credentials
-            modelBuilder.Entity<Users>().HasData(new Users
+            modelBuilder.Entity<User>().HasData(new User
             {
                 UserId = 3,
                 UserName = "admin",

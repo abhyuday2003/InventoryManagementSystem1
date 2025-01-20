@@ -14,12 +14,9 @@ namespace InventoryManagementSystem1.Models
         [ForeignKey("Users")]
         public int UserId { get; set; }
 
-        public Users Users { get; set; }
-
         [ForeignKey("Products")]
         public int ProductId { get; set; }
 
-        public Products Products { get; set; }
         public int Quantity { get; set; }
 
         public string TransactionType { get; set; }

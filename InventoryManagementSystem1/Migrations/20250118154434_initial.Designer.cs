@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250120065730_intial")]
-    partial class intial
+    [Migration("20250118154434_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,27 +75,16 @@ namespace InventoryManagementSystem1.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CreditManagements");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem1.Models.LoginViewModel", b =>
-                {
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserName");
-
-                    b.ToTable("loginViewModels");
+                    b.ToTable("CreditManagement");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem1.Models.OrderDetails", b =>
                 {
-                    b.Property<int>("SerialId")
+                    b.Property<int>("OrderDetailId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailId"));
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
@@ -109,7 +98,7 @@ namespace InventoryManagementSystem1.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("SerialId", "OrderId");
+                    b.HasKey("OrderDetailId");
 
                     b.HasIndex("OrderId");
 
@@ -144,8 +133,6 @@ namespace InventoryManagementSystem1.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("OrderId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -184,31 +171,6 @@ namespace InventoryManagementSystem1.Migrations
                     b.HasIndex("SupplierId");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem1.Models.RegisterViewModel", b =>
-                {
-                    b.Property<string>("UserName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserName");
-
-                    b.ToTable("RegisterViewModels");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem1.Models.Suppliers", b =>
@@ -266,10 +228,6 @@ namespace InventoryManagementSystem1.Migrations
 
                     b.HasKey("TransactionId");
 
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
                     b.ToTable("Transactions");
                 });
 
@@ -286,13 +244,11 @@ namespace InventoryManagementSystem1.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -300,29 +256,17 @@ namespace InventoryManagementSystem1.Migrations
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 3,
-                            CreatedAt = new DateTime(2025, 1, 20, 12, 27, 29, 808, DateTimeKind.Local).AddTicks(6071),
-                            Email = "admin@ims.com",
-                            Password = "Admin@123",
-                            Role = "Admin",
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("InventoryManagementSystem1.Models.CreditManagement", b =>
                 {
                     b.HasOne("InventoryManagementSystem1.Models.Suppliers", "Suppliers")
-                        .WithMany("CreditManagements")
+                        .WithMany()
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -357,27 +301,16 @@ namespace InventoryManagementSystem1.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem1.Models.Orders", b =>
-                {
-                    b.HasOne("InventoryManagementSystem1.Models.Users", "Users")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Users");
-                });
-
             modelBuilder.Entity("InventoryManagementSystem1.Models.Products", b =>
                 {
                     b.HasOne("InventoryManagementSystem1.Models.Categories", "Categories")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("InventoryManagementSystem1.Models.Suppliers", "Suppliers")
-                        .WithMany("Products")
+                        .WithMany()
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -387,52 +320,9 @@ namespace InventoryManagementSystem1.Migrations
                     b.Navigation("Suppliers");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem1.Models.Transactions", b =>
-                {
-                    b.HasOne("InventoryManagementSystem1.Models.Products", "Products")
-                        .WithMany("Transactions")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("InventoryManagementSystem1.Models.Users", "Users")
-                        .WithMany("Transactions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Products");
-
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem1.Models.Categories", b =>
-                {
-                    b.Navigation("Products");
-                });
-
             modelBuilder.Entity("InventoryManagementSystem1.Models.Orders", b =>
                 {
                     b.Navigation("OrderDetails");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem1.Models.Products", b =>
-                {
-                    b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem1.Models.Suppliers", b =>
-                {
-                    b.Navigation("CreditManagements");
-
-                    b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem1.Models.Users", b =>
-                {
-                    b.Navigation("Orders");
-
-                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }

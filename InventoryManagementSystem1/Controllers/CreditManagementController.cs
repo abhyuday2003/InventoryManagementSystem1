@@ -18,23 +18,23 @@ namespace InventoryManagementSystem1.Controllers
         // Fetch and Display Credit Information
         public IActionResult Details(int userId)
         {
-            //var creditData = _context.CreditManagement
-            //    .Include(c => c.Users)
-            //    .Include(c => c.Suppliers)
-            //    .Where(c => c.UserId == userId)
-            //    .ToList();
+            var creditData = _context.CreditManagement
+                .Include(c => c.Users)
+                .Include(c => c.Suppliers)
+                .Where(c => c.UserId == userId)
+                .ToList();
 
-            //if (creditData == null || !creditData.Any()  )
-            //{
-            //    // Redirect to NoCreditInfo view if no credit data exists
-            //    return View("NoCreditInfo");
-            //}
-            return View();
-           // return View(creditData);
+            if (creditData == null  )
+            {
+                // Redirect to NoCreditInfo view if no credit data exists
+                return View("NoCreditInfo");
+            }
+
+            return View(creditData);
         }
 
         // Pay Outstanding Balance
-      /*  [HttpPost]
+        [HttpPost]
         public IActionResult Pay(int creditId, decimal paymentAmount)
         {
             var creditRecord = _context.CreditManagement
@@ -60,7 +60,7 @@ namespace InventoryManagementSystem1.Controllers
             }
 
             return RedirectToAction("Details", new { userId = creditRecord?.UserId });
-        } */
+        }
     }
 
 }

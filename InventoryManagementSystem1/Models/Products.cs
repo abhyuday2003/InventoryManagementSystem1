@@ -6,6 +6,7 @@ namespace InventoryManagementSystem1.Models
     public class Products
     {
         [Key]
+
         public int ProductId { get; set; }
 
         public string ProductName { get; set; }
@@ -24,6 +25,5 @@ namespace InventoryManagementSystem1.Models
         public Categories Categories { get; set; }
 
         public Suppliers Suppliers { get; set; }
-        public ICollection<Transactions> Transactions { get; set; }
     }
 }
