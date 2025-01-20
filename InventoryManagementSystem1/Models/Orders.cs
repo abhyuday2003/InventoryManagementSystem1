@@ -18,6 +18,7 @@ namespace InventoryManagementSystem1.Models
 
         [ForeignKey("Users")]
         public int UserId { get; set; }
+        public Users Users { get; set; }
 
         public string OrderType { get; set; }
 

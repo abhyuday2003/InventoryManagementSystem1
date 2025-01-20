@@ -14,5 +14,9 @@ namespace InventoryManagementSystem1.Models
         public string ContactPhone { get; set; }
 
         public string Address { get; set; }
+
+        public ICollection<Products> Products { get; set; }
+
+        public ICollection<CreditManagement> CreditManagements { get; set; }
     }
 }

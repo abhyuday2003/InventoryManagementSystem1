@@ -4,6 +4,7 @@ namespace InventoryManagementSystem1.Models
 {
     public class LoginViewModel
     {
+        [Key]
         [Required]
         public string UserName { get; set; }
 
